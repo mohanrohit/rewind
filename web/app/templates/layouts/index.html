@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="Hello" />
+        <meta name="viewport" content="width=device-width" />
+
+        <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}">
+
+        <script type="module" src="{{ asset_url('main.js') }}"></script>
+
+        <title>Rewind</title>
+    </head>
+    <body class="flex flex-col min-h-screen">
+        {{ render_partial("partials/header.html") }}
+
+        <main class="flex flex-grow flex-col px-4 sm:px-8 py-4 max-w-screen-lg">
+            {% block content %}
+            Put your content here
+             {% endblock %}
+        </main>
+
+        {{ render_partial("partials/footer.html") }}
+    </body>
+</html>

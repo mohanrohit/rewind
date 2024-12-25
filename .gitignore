@@ -1,3 +1,10 @@
+# --- replit ---
+
+.replit
+replit.nix
+
+# --- python ---
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -14,7 +21,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+#lib/
 lib64/
 parts/
 sdist/
@@ -169,3 +176,8 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+
+# --- nodejs ---
+
+node_modules/

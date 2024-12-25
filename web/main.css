@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body
+{
+    @apply bg-gray-50 text-gray-900 font-sans;
+}
+
+a
+{
+    @apply
+    text-blue-600
+    hover:text-blue-800
+    visited:text-purple-600
+    transition;
+}
+
+@layer components
+{
+    .button
+    {
+        @apply px-4 py-2 rounded font-bold text-center;
+    }
+
+    .button-default
+    {
+        @apply
+        bg-gray-400
+        hover:bg-gray-600
+        text-gray-100
+        rounded-lg
+    }
+
+    .button-success
+    {
+        @apply
+        bg-green-500
+        hover:bg-green-700
+        text-green-100
+        rounded-lg
+    }
+}
