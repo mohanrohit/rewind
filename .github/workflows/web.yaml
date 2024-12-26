@@ -1,0 +1,77 @@
+name: Build and deploy webapp
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'web/**'
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+
+      # Install nodejs
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./web
+
+      - name: Build frontend
+        run: npm run build
+        working-directory: ./web
+
+      # Install python
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        working-directory: ./web
+
+      - name: Debug directory structure
+        run: ls -la ./web/public
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rewind-web
+          path: |
+            ./web/**
+            !./web/node_modules/**
+
+  deploy:
+    runs-on: windows-latest # Web Deploy requires Windows runners
+    needs: build
+    steps:
+      - name: Login to Azure # no point doing anything else if
+        # we can't log in
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.REWIND_CI_CREDENTIALS }}
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: rewind-web
+
+      - name: Deploy to Azure
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'rewind-preview-web-app'
+          slot-name: 'production'
+          publish-profile: ${{ secrets.REWIND_PREVIEW_PUBLISH_PROFILE }}
+          package: .
